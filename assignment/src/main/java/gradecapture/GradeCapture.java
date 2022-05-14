@@ -11,8 +11,11 @@ import java.util.regex.Pattern;
  * @author Pieter van den Hombergh {@code <p.vandenhombergh@fontys.nl>}
  */
 public class GradeCapture {
-    //TODO implement regex
-    static final String REGEX = "^$";
+    static final String REGEX = "^(\\d{7})" // starting with a number (student number = 7 digits)
+            + ".*" // then whatever (name of student)
+            + "\\s+" // at least one whitespace
+            + "(10(\\.0)?|\\d([.,]\\d)?)" // 10(.0)? or one digit and optionally comma or period followed by one digit.
+            + "$"; // and end
     private static final Pattern PATTERN = Pattern.compile(REGEX);
     private final Matcher matcher;
 
@@ -40,8 +43,7 @@ public class GradeCapture {
      * @return whether there is a match
      */
     public boolean hasResult() {
-        //TODO implement hasResult()
-        return false;
+        return matcher.matches();
     }
 
     /**
@@ -51,8 +53,23 @@ public class GradeCapture {
      * @return the grade or null when no match
      */
     public Double getGrade() {
-        //TODO implement getGrade()
-        return 0.0D;
+        String check = "\\s+(10(\\.0)?|\\d([.,]\\d)?)$";
+        Pattern checkGrade = Pattern.compile(check);
+
+        if(this.hasResult()){
+            String match = matcher.group(0); //the whole matches
+            Matcher m = checkGrade.matcher(match);
+
+            if (m.find()){
+                String result = m.group(0);
+                if(result.contains(",")){
+                    result = result.replace(",", ".");
+                }
+                return Double.parseDouble(result);
+            }
+        }
+
+        return null;
     }
 
     /**
@@ -61,8 +78,20 @@ public class GradeCapture {
      * @return the student number or null when no match.
      */
     public Integer getStudentNumber() {
-        //TODO implement getStudentNumber()
-        return 0;
+        String check = "^(\\d{7})";
+        Pattern checkNumber = Pattern.compile(check);
+
+        if(this.hasResult()){
+            String match = matcher.group(0);
+            Matcher m = checkNumber.matcher(match);
+
+            if (m.find()){
+                String result = m.group(0);
+                return Integer.parseInt(result);
+            }
+        }
+
+        return null;
     }
     
     
