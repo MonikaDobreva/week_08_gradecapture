@@ -41,7 +41,7 @@ public class GradeCollectorTest {
             GradeCollector.main(new String[]{""});
         };
         
-        assertThatCode(code).isExactlyInstanceOf(AccessDeniedException.class);
+        assertThatCode(code).isExactlyInstanceOf(UncheckedIOException.class);
     }
 
     /**
