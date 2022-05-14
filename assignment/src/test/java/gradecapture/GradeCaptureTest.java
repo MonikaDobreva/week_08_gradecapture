@@ -1,6 +1,9 @@
 package gradecapture;
 
 import java.util.AbstractMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import static org.assertj.core.api.Assertions.*;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.*;
@@ -28,8 +31,11 @@ public class GradeCaptureTest {
     @CsvFileSource( resources = { "testdata.csv" } )
     void hasResult( String input, boolean expHasResult,
             String matchedGradeString, Integer studentNumber, double grade ) {
-        // TODO test hasResult
-        fail( "test hasResult has ended and might still need implementation" );
+
+        GradeCapture gradeCapture = new GradeCapture(input);
+
+        assertThat(gradeCapture.hasResult()).isEqualTo(expHasResult);
+        //fail( "test hasResult has ended and might still need implementation" );
     }
 
     /**
@@ -47,7 +53,18 @@ public class GradeCaptureTest {
     void testGetResult( String input, boolean expHasResult,
             String matchedGradeString, Integer studentNumber, double grade ) {
 
-        // TODO test getResult
-        fail("testGetResult not implemented");
+        GradeCapture gradeCapture = new GradeCapture(input);
+        AbstractMap.SimpleEntry<Integer, Double> result = gradeCapture.getResult();
+
+        SoftAssertions.assertSoftly(softly -> {
+            if (expHasResult) {
+                softly.assertThat(result.getKey()).isEqualTo(studentNumber);
+                softly.assertThat(result.getValue()).isEqualTo(grade);
+            } else {
+                softly.assertThat(result.getKey()).isNull();
+                softly.assertThat(result.getValue()).isNull();
+            }
+        });
+        //fail("testGetResult not implemented");
     }
 }
