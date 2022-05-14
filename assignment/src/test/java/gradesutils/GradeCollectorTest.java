@@ -51,7 +51,7 @@ public class GradeCollectorTest {
     public void testGetGradesAsMap() throws IOException {
         var collector = new GradeCollector("testdata.txt");
         var grades = collector.getGradesAsMap();
-        assertThat(grades.size()).isEqualTo(71);
+        assertThat(grades.size()).isEqualTo(70);
     }
 
 }
